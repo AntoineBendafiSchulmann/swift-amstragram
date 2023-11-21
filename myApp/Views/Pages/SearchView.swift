@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SearchView: View {
+    //Transmettre cette source de vérité
     @EnvironmentObject var imageDataManager: ImageDataManager
     @State private var searchText = ""
 

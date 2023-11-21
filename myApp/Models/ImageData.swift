@@ -7,7 +7,9 @@
 
 import Foundation
 
+// rendre l'objet observable: permet à SwiftUI de surveiller les changements dans les données qu'elle gère
 class ImageData: ObservableObject, Identifiable {
+    // Publier les propriétés modifiables: dans une structure MVVM typique, ImageData devrait être une struct sans @Published
     @Published var url: String
     @Published var title: String
     @Published var description: String

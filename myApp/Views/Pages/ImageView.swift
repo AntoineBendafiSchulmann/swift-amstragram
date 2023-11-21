@@ -10,7 +10,11 @@ import SwiftUI
 struct ImageView: View {
     @State private var imageData: ImageData
     @State private var isEditing = false
+    // on créé la variable d'état pour la popup
+    @State private var showingDeleteAlert = false
+
     // Accès aux données des images partagées dans toute l'application.
+    //Transmettre cette source de vérité
     @EnvironmentObject var imageDataManager: ImageDataManager
     // Utilisé pour fermer la vue actuelle.
     @Environment(\.presentationMode) var presentationMode
@@ -22,6 +26,7 @@ struct ImageView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
+                // Affichage de l'image
                 AsyncImage(url: URL(string: imageData.url)) { image in
                     image.resizable()
                 } placeholder: {
@@ -31,6 +36,7 @@ struct ImageView: View {
                 .frame(maxWidth: .infinity)
                 .cornerRadius(10)
 
+                // Titre et description de l'image
                 Text(imageData.title)
                     .font(.title)
                     .fontWeight(.bold)
@@ -39,6 +45,7 @@ struct ImageView: View {
                     .font(.body)
                     .foregroundColor(.secondary)
 
+                // Auteur et date
                 HStack {
                     Text("de " + imageData.author)
                     Spacer()
@@ -47,8 +54,8 @@ struct ImageView: View {
                 .font(.caption)
                 .foregroundColor(.gray)
 
+                // Boutons Modifier et Supprimer
                 HStack {
-                    // Bouton Modifier
                     Button(action: { isEditing = true }) {
                         Label("Modifier", systemImage: "pencil")
                     }
@@ -58,10 +65,8 @@ struct ImageView: View {
                     .foregroundColor(.white)
                     .cornerRadius(8)
 
-                    // Bouton Supprimer
                     Button(action: {
-                        imageDataManager.removeImage(byUrl: imageData.url)
-                        presentationMode.wrappedValue.dismiss()
+                        showingDeleteAlert = true
                     }) {
                         Label("Supprimer", systemImage: "trash")
                     }
@@ -74,17 +79,29 @@ struct ImageView: View {
             }
             .padding()
             .sheet(isPresented: $isEditing) {
-                EditImageView(imageData: $imageData)
-                    .environmentObject(imageDataManager)
+                        EditImageView(imageData: $imageData, authors: imageDataManager.authors)
+                            .environmentObject(imageDataManager)
             }
         }
-        .navigationBarTitle("Détails de l'Image", displayMode: .inline)
+        .navigationBarTitle("Détails de l'image", displayMode: .inline)
+        .alert(isPresented: $showingDeleteAlert) {
+            Alert(
+                title: Text("Confirmer la suppression"),
+                message: Text("Voulez-vous vraiment supprimer cette image ?"),
+                primaryButton: .destructive(Text("Supprimer")) {
+                    imageDataManager.removeImage(byUrl: imageData.url)
+                    presentationMode.wrappedValue.dismiss()
+                },
+                secondaryButton: .cancel()
+            )
+        }
     }
 
+    // Fonction pour formater la date
     func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
-        formatter.timeStyle = .short
+        formatter.timeStyle = .none
         return formatter.string(from: date)
     }
 }

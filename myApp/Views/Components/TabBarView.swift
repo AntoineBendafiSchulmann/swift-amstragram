@@ -22,6 +22,7 @@ struct TabBarView: View {
                 .tabItem {
                     Label("Recherche", systemImage: "magnifyingglass")
                 }
+            //et ainsi de suite au besoin
         }
     }
 }

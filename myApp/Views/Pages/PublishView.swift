@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PublishView: View {
     // Accès aux données des images partagées dans toute l'application.
+    //Transmettre cette source de vérité
     @EnvironmentObject var imageDataManager: ImageDataManager
     // Utilisé pour fermer la vue actuelle.
     @Environment(\.presentationMode) var presentationMode
@@ -17,20 +18,19 @@ struct PublishView: View {
     @State private var author = ""
     @State private var imageUrl = ""
     @State private var date = Date()
-    @State private var showAlert = false // État pour gérer l'affichage de l'alerte
+    // on créé la variable d'état pour la popup
+    @State private var showAlert = false
 
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("Veuillez renseigner les informations de votre publication")) {
                     TextField("Image URL", text: $imageUrl)
-                    // Vérifie si l'URL entrée est valide et non vide
+
                     if let url = URL(string: imageUrl), imageUrl != "" {
-                        // Utilisation de AsyncImage pour charger et afficher l'image depuis l'URL
                         AsyncImage(url: url) { image in
                             image.resizable()
                         } placeholder: {
-                            // Indicateur de progression affiché pendant le chargement de l'image au cas ou
                             ProgressView()
                         }
                         .aspectRatio(contentMode: .fit)
@@ -46,12 +46,10 @@ struct PublishView: View {
                 Button("Publish") {
                     let newImageData = ImageData(url: imageUrl, title: title, description: description, author: author, date: date)
                     imageDataManager.addImage(newImageData)
-                    // Vider les champs
                     title = ""
                     description = ""
                     author = ""
                     imageUrl = ""
-                    // Afficher l'alerte de succès
                     showAlert = true
                 }
             }
@@ -74,3 +72,4 @@ struct PublishView_Previews: PreviewProvider {
         PublishView().environmentObject(ImageDataManager())
     }
 }
+

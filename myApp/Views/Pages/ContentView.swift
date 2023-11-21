@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    //Transmettre cette source de vérité
     @EnvironmentObject var imageDataManager: ImageDataManager
 
     var body: some View {

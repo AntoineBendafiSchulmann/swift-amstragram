@@ -48,6 +48,52 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		908336C62B0CA42F0027F326 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				908336C42B0C0A750027F326 /* ImageData.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		908336C72B0CA44A0027F326 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				908336CA2B0CDCF70027F326 /* Components */,
+				908336C92B0CDCD80027F326 /* Pages */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		908336C82B0CA5EB0027F326 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				908336BC2B0B9E000027F326 /* ImageDataManager.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		908336C92B0CDCD80027F326 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				908336BA2B0B9B4F0027F326 /* PublishView.swift */,
+				908336B62B0B85540027F326 /* ImageView.swift */,
+				908336B82B0B8A6E0027F326 /* SearchView.swift */,
+				908336BE2B0BD80B0027F326 /* EditImageView.swift */,
+				90B061292B0B6C2B008F824F /* ContentView.swift */,
+			);
+			path = Pages;
+			sourceTree = "<group>";
+		};
+		908336CA2B0CDCF70027F326 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				908336C02B0BDD440027F326 /* LogoBarView.swift */,
+				90B061352B0B794F008F824F /* TabBarView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		90B0611B2B0B6C2B008F824F = {
 			isa = PBXGroup;
 			children = (
@@ -67,16 +113,10 @@
 		90B061262B0B6C2B008F824F /* myApp */ = {
 			isa = PBXGroup;
 			children = (
-				908336C42B0C0A750027F326 /* ImageData.swift */,
-				908336BC2B0B9E000027F326 /* ImageDataManager.swift */,
-				908336BA2B0B9B4F0027F326 /* PublishView.swift */,
-				908336BE2B0BD80B0027F326 /* EditImageView.swift */,
-				908336B82B0B8A6E0027F326 /* SearchView.swift */,
-				908336B62B0B85540027F326 /* ImageView.swift */,
-				90B061352B0B794F008F824F /* TabBarView.swift */,
+				908336C82B0CA5EB0027F326 /* ViewModels */,
+				908336C72B0CA44A0027F326 /* Views */,
+				908336C62B0CA42F0027F326 /* Models */,
 				90B061272B0B6C2B008F824F /* myAppApp.swift */,
-				90B061292B0B6C2B008F824F /* ContentView.swift */,
-				908336C02B0BDD440027F326 /* LogoBarView.swift */,
 				90B0612B2B0B6C2E008F824F /* Assets.xcassets */,
 				90B0612D2B0B6C2E008F824F /* Preview Content */,
 			);
