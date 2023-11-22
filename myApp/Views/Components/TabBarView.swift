@@ -22,6 +22,14 @@ struct TabBarView: View {
                 .tabItem {
                     Label("Recherche", systemImage: "magnifyingglass")
                 }
+            FavoritesView()
+                .tabItem {
+                    Label("Favoris", systemImage: "heart.fill")
+                }
+            PokemonView()
+                .tabItem {
+                    Label("Pokedex", systemImage: "menucard")
+                }
             //et ainsi de suite au besoin
         }
     }

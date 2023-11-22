@@ -8,25 +8,19 @@
 import SwiftUI
 
 struct ImageView: View {
-    @State private var imageData: ImageData
-    @State private var isEditing = false
-    // on créé la variable d'état pour la popup
-    @State private var showingDeleteAlert = false
-
+    @ObservedObject var imageData: ImageData
     // Accès aux données des images partagées dans toute l'application.
     //Transmettre cette source de vérité
     @EnvironmentObject var imageDataManager: ImageDataManager
+    @State private var isEditing = false
+    // on créé la variable d'état pour la popup
+    @State private var showingDeleteAlert = false
     // Utilisé pour fermer la vue actuelle.
     @Environment(\.presentationMode) var presentationMode
-
-    init(imageData: ImageData) {
-        _imageData = State(initialValue: imageData)
-    }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
-                // Affichage de l'image
                 AsyncImage(url: URL(string: imageData.url)) { image in
                     image.resizable()
                 } placeholder: {
@@ -36,7 +30,6 @@ struct ImageView: View {
                 .frame(maxWidth: .infinity)
                 .cornerRadius(10)
 
-                // Titre et description de l'image
                 Text(imageData.title)
                     .font(.title)
                     .fontWeight(.bold)
@@ -45,7 +38,6 @@ struct ImageView: View {
                     .font(.body)
                     .foregroundColor(.secondary)
 
-                // Auteur et date
                 HStack {
                     Text("de " + imageData.author)
                     Spacer()
@@ -54,7 +46,6 @@ struct ImageView: View {
                 .font(.caption)
                 .foregroundColor(.gray)
 
-                // Boutons Modifier et Supprimer
                 HStack {
                     Button(action: { isEditing = true }) {
                         Label("Modifier", systemImage: "pencil")
@@ -79,39 +70,45 @@ struct ImageView: View {
             }
             .padding()
             .sheet(isPresented: $isEditing) {
-                        EditImageView(imageData: $imageData, authors: imageDataManager.authors)
-                            .environmentObject(imageDataManager)
+                if let index = imageDataManager.images.firstIndex(where: { $0.id == imageData.id }) {
+                    EditImageView(imageData: $imageDataManager.images[index], authors: imageDataManager.authors)
+                        .environmentObject(imageDataManager)
+                }
+            }
+            .alert(isPresented: $showingDeleteAlert) {
+                Alert(
+                    title: Text("Confirmer la suppression"),
+                    message: Text("Voulez-vous vraiment supprimer cette image ?"),
+                    primaryButton: .destructive(Text("Supprimer")) {
+                        imageDataManager.removeImage(byId: imageData.id)
+                        presentationMode.wrappedValue.dismiss()
+                    },
+                    secondaryButton: .cancel()
+                )
             }
         }
-        .navigationBarTitle("Détails de l'image", displayMode: .inline)
-        .alert(isPresented: $showingDeleteAlert) {
-            Alert(
-                title: Text("Confirmer la suppression"),
-                message: Text("Voulez-vous vraiment supprimer cette image ?"),
-                primaryButton: .destructive(Text("Supprimer")) {
-                    imageDataManager.removeImage(byUrl: imageData.url)
-                    presentationMode.wrappedValue.dismiss()
-                },
-                secondaryButton: .cancel()
-            )
-        }
+        .navigationBarTitle("Détails de l'Image", displayMode: .inline)
     }
 
     // Fonction pour formater la date
-    func formatDate(_ date: Date) -> String {
+    private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
-        formatter.timeStyle = .none
+        formatter.timeStyle = .none //on enlève l'heure
         return formatter.string(from: date)
     }
 }
 
 struct ImageView_Previews: PreviewProvider {
     static var previews: some View {
-        ImageView(imageData: ImageData(url: "https://example.com/image.jpg", title: "titre", description: "description", author: "Antoine", date: Date()))
+        let imageData = ImageData(url: "https://example.com/image.jpg", title: "Titre Exemple", description: "Description Exemple", author: "Auteur Exemple", date: Date())
+        return ImageView(imageData: imageData)
             .environmentObject(ImageDataManager())
     }
 }
+
+
+
 
 
 

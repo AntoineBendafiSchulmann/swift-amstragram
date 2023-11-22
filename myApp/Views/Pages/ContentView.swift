@@ -15,10 +15,10 @@ struct ContentView: View {
         NavigationView {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.flexible())], spacing: 10) {
-                    ForEach(imageDataManager.images.indices, id: \.self) { index in
-                        NavigationLink(destination: ImageView(imageData: imageDataManager.images[index])) {
-                            VStack(alignment: .leading) {
-                                AsyncImage(url: URL(string: imageDataManager.images[index].url)) { image in
+                    ForEach(imageDataManager.images, id: \.id) { imageData in
+                        VStack(alignment: .leading) {
+                            NavigationLink(destination: ImageView(imageData: imageData)) {
+                                AsyncImage(url: URL(string: imageData.url)) { image in
                                     image.resizable()
                                 } placeholder: {
                                     Color.gray
@@ -26,21 +26,37 @@ struct ContentView: View {
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: UIScreen.main.bounds.width - 20)
                                 .clipped()
-
-                                Text(imageDataManager.images[index].title)
-                                    .font(.headline)
-                                    .padding([.top, .horizontal])
-
-                                Text("de \(imageDataManager.images[index].author)")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                    .padding(.horizontal)
                             }
-                            .background(Color.white)
-                            .cornerRadius(8)
-                            .shadow(radius: 3)
-                            .padding(.vertical, 5)
+
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(imageData.title)
+                                        .font(.headline)
+                                        .padding([.top, .horizontal])
+
+                                    Text("de \(imageData.author)")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                        .padding(.horizontal)
+                                    
+
+                                }
+
+                                Spacer()
+
+                                // Bouton pour basculer l'état favori
+                                Button(action: {
+                                    imageDataManager.toggleFavorite(for: imageData.id)
+                                }) {
+                                    Image(systemName: imageData.isFavorite ? "heart.fill" : "heart")
+                                        .foregroundColor(imageData.isFavorite ? .red : .gray)
+                                }
+                            }
                         }
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .shadow(radius: 3)
+                        .padding(.vertical, 5)
                     }
                 }
                 .padding(.horizontal)
@@ -48,7 +64,6 @@ struct ContentView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    // on importe la sorte de header
                     LogoBarView()
                 }
             }
@@ -61,6 +76,29 @@ struct ContentView_Previews: PreviewProvider {
         ContentView().environmentObject(ImageDataManager())
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
