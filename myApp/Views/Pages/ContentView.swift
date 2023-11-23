@@ -14,8 +14,10 @@ struct ContentView: View {
         NavigationView {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.flexible())], spacing: 10) {
+                    //collection d'images.
                     ForEach(imageDataManager.images, id: \.id) { imageData in
                         VStack(alignment: .leading) {
+                            // Lien vers la vue détaillée de l'image choisie
                             NavigationLink(destination: ImageView(imageData: imageData)) {
                                 AsyncImage(url: URL(string: imageData.url)) { image in
                                     image.resizable()
@@ -27,6 +29,7 @@ struct ContentView: View {
                                 .clipped()
                             }
 
+                            // Affichage du titre, de l'auteur et du bouton favori
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text(imageData.title)
@@ -40,7 +43,7 @@ struct ContentView: View {
                                 }
 
                                 Spacer()
-
+                                // Bouton pour basculer l'état favori.
                                 Button(action: {
                                     imageDataManager.toggleFavorite(for: imageData.id)
                                 }) {

@@ -6,7 +6,7 @@
 
 Amstragram  est une application iOS de partage des photos. 
 
-## Features
+## Features de base
 
 - [x] Création d'une publication
 - [x] Modification d'une publication
@@ -23,6 +23,9 @@ Amstragram  est une application iOS de partage des photos.
 - [x] possibilité de chercher un pokémon par son nom (en anglais uniquement)
 
 les données sont persistantes , elles sont stockées dans un fichier JSON en local
+
+et plus encore ! (j'ai rajouté des trucs comme des animations , un jeu par exemple)
+
 ## Installation
 
 - Cloner le projet

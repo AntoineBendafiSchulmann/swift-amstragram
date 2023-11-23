@@ -17,12 +17,14 @@ class ImageDataManager: ObservableObject {
         loadImages()
     }
 
+    // Ajoute une nouvelle image et sauvegarde la collection.
     func addImage(_ imageData: ImageData) {
         images.append(imageData)
         authors.insert(imageData.author)
         saveImages()
     }
 
+    // Supprime une image et sauvegarde la collection.
     func removeImage(byId id: UUID) {
         if let index = images.firstIndex(where: { $0.id == id }) {
             authors.remove(images[index].author)
@@ -31,6 +33,7 @@ class ImageDataManager: ObservableObject {
         }
     }
 
+    //met à jour une image et sauvegarde la collection
     func updateImage(_ updatedImageData: ImageData) {
         if let index = images.firstIndex(where: { $0.id == updatedImageData.id }) {
             images[index] = updatedImageData
@@ -38,7 +41,7 @@ class ImageDataManager: ObservableObject {
         }
     }
     
-
+    // Bascule le statut de favori et sauvegarde immédiatement.
     func toggleFavorite(for id: UUID) {
         if let index = images.firstIndex(where: { $0.id == id }) {
             images[index].isFavorite.toggle()
@@ -47,6 +50,7 @@ class ImageDataManager: ObservableObject {
         }
     }
 
+    // Sauvegarde la collection d'images dans un fichier JSON.
     private func saveImages() {
         do {
             let data = try JSONEncoder().encode(images)
@@ -57,6 +61,7 @@ class ImageDataManager: ObservableObject {
         }
     }
 
+    // Charge les images depuis un fichier JSO
     private func loadImages() {
         let url = getDocumentsDirectory().appendingPathComponent("images.json")
         do {
@@ -68,6 +73,7 @@ class ImageDataManager: ObservableObject {
         }
     }
 
+    // Renvoie le répertoire des documents de l'application pour le stockage.
     private func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
