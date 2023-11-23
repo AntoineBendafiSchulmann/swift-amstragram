@@ -24,6 +24,18 @@ struct PokemonSingleView: View {
                     .frame(width: 200, height: 200)
                     .cornerRadius(100)
                 }
+                
+                // Affichage des types du Pokémon avec couleur adaptée.
+                HStack {
+                   ForEach(pokemon.types, id: \.slot) { typeEntry in
+                      Text(typeEntry.type.name.capitalized)
+                        .padding(5)
+                       // Utilisation de l'extension
+                        .background(typeEntry.type.name.pokemonTypeColor)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                    }
+                }
 
                 // Nom du Pokémon.
                 Text(pokemon.name.capitalized)
@@ -64,10 +76,19 @@ struct PokemonSingleView: View {
 
 struct PokemonSingleView_Previews: PreviewProvider {
     static var previews: some View {
-        let dummyPokemon = PokemonData(id: 1, name: "bulbasaur", sprites: PokemonSprites(front_default: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"), stats: [PokemonStat(base_stat: 45, stat: StatDetail(name: "hp")), PokemonStat(base_stat: 49, stat: StatDetail(name: "attack"))])
-        PokemonSingleView(pokemon: dummyPokemon).environmentObject(PokemonDataManager())
+        let dummyTypes = [PokemonTypeEntry(slot: 1, type: TypeDetail(name: "grass")), PokemonTypeEntry(slot: 2, type: TypeDetail(name: "poison"))]
+        let dummyPokemon = PokemonData(id: 1,
+                                       name: "bulbasaur",
+                                       sprites: PokemonSprites(front_default: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"),
+                                       types: dummyTypes,
+                                       stats: [PokemonStat(base_stat: 45, stat: StatDetail(name: "hp")),
+                                               PokemonStat(base_stat: 49, stat: StatDetail(name: "attack"))])
+        return PokemonSingleView(pokemon: dummyPokemon).environmentObject(PokemonDataManager())
     }
 }
+
+
+
 
 
 

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    //Transmettre cette source de vérité
     @EnvironmentObject var imageDataManager: ImageDataManager
 
     var body: some View {
@@ -38,13 +37,10 @@ struct ContentView: View {
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                         .padding(.horizontal)
-                                    
-
                                 }
 
                                 Spacer()
 
-                                // Bouton pour basculer l'état favori
                                 Button(action: {
                                     imageDataManager.toggleFavorite(for: imageData.id)
                                 }) {
@@ -76,6 +72,17 @@ struct ContentView_Previews: PreviewProvider {
         ContentView().environmentObject(ImageDataManager())
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

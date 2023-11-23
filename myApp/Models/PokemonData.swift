@@ -28,11 +28,23 @@ struct StatDetail: Decodable {
     let name: String
 }
 
-// Informations détaillées sur chaque Pokémon.
+// Structure pour le type de Pokémon.
+struct PokemonTypeEntry: Decodable {
+    let slot: Int
+    let type: TypeDetail
+}
+
+// Détail du type de Pokémon.
+struct TypeDetail: Decodable {
+    let name: String
+}
+
+// Les données principales de chaque Pokémon, y compris les types.
 struct PokemonData: Decodable, Identifiable {
     let id: Int
     let name: String
     let sprites: PokemonSprites
+    let types: [PokemonTypeEntry]
     let stats: [PokemonStat]
 }
 

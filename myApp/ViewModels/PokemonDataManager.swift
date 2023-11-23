@@ -15,7 +15,7 @@ class PokemonDataManager: ObservableObject {
 
     // Récupère les  Pokémons avec un nombre spécifique.
     func fetchPokemons() {
-        let urlString = "https://pokeapi.co/api/v2/pokemon?limit=600"
+        let urlString = "https://pokeapi.co/api/v2/pokemon?limit=151"
         guard let url = URL(string: urlString) else { return }
 
         // Tâche asynchrone pour télécharger les données

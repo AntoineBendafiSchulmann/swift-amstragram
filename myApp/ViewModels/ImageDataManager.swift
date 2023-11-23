@@ -12,48 +12,76 @@ class ImageDataManager: ObservableObject {
     @Published var authors: Set<String>
 
     init() {
-        // Création d'une liste initiale d'images pour aller plus vite en testant
-        let initialImages = [
-            ImageData(url: "https://uploads-ssl.webflow.com/5f3c19f18169b62a0d0bf387/60d33be745999ac3353f49bd_KyhyHs_Rlf3kWWoC8Al_C9Y9SZ4dQu_K0fiLIsiCA5Gl8M3Eq77np68PFUgDPd6lKA8EmhKgWs7joHpsQm8upaoIayr4hi6O7Oj3HTzcoVop1HORjy74OdVTZNqFg_mIlfotr0EJ.png", title: "Image 1", description: "Description 1", author: "Auteur 1", date: Date()),
-            ImageData(url: "https://www.freecodecamp.org/news/content/images/2019/07/arrays-are-objects.jpg", title: "Image 2", description: "Description 2", author: "Auteur 2", date: Date())
-            // Plus d'images ici...
-        ]
-
-        self.images = initialImages
-
-        // Création d'une liste d'auteurs liés aux images crées ci-dessus
-        self.authors = Set(initialImages.map { $0.author })
+        self.images = []
+        self.authors = []
+        loadImages()
     }
 
-    // Ajoute une nouvelle image à la collection et met à jour la liste des auteurs au besoin
     func addImage(_ imageData: ImageData) {
         images.append(imageData)
         authors.insert(imageData.author)
+        saveImages()
     }
 
-    // Supprime une image par id et met à jour la liste des auteurs si nécessaire
     func removeImage(byId id: UUID) {
         if let index = images.firstIndex(where: { $0.id == id }) {
             authors.remove(images[index].author)
             images.remove(at: index)
+            saveImages()
         }
     }
 
-    // Met à jour une image existante
     func updateImage(_ updatedImageData: ImageData) {
         if let index = images.firstIndex(where: { $0.id == updatedImageData.id }) {
             images[index] = updatedImageData
+            saveImages()
         }
     }
+    
 
-    // ajouter un status de favoris à l'image
     func toggleFavorite(for id: UUID) {
         if let index = images.firstIndex(where: { $0.id == id }) {
             images[index].isFavorite.toggle()
             objectWillChange.send()
+            saveImages()
         }
     }
+
+    private func saveImages() {
+        do {
+            let data = try JSONEncoder().encode(images)
+            let url = getDocumentsDirectory().appendingPathComponent("images.json")
+            try data.write(to: url)
+        } catch {
+            print("Erreur lors de la sauvegarde des images: \(error)")
+        }
+    }
+
+    private func loadImages() {
+        let url = getDocumentsDirectory().appendingPathComponent("images.json")
+        do {
+            let data = try Data(contentsOf: url)
+            images = try JSONDecoder().decode([ImageData].self, from: data)
+            authors = Set(images.map { $0.author })
+        } catch {
+            print("Erreur lors du chargement des images: \(error)")
+        }
+    }
+
+    private func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
 }
+
+
+
+
+
+
+
+
+
 
 
 
